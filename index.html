@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Faceless Storyboard AI</title>
+<style>
+body{font-family:Arial,sans-serif;background:#101827;color:#fff;margin:0;padding:18px}
+h1{font-size:25px;color:#7dd3fc}
+p{color:#cbd5e1}
+label{display:block;margin-top:15px;margin-bottom:7px}
+input,select,textarea,button{box-sizing:border-box;width:100%;padding:12px;border-radius:9px;border:1px solid #475569;font-size:15px}
+input,select,textarea{background:#1e293b;color:white}
+button{background:#0284c7;color:white;border:0;margin-top:10px;font-weight:bold}
+.scene{border:1px solid #334155;padding:13px;border-radius:12px;margin-top:14px}
+</style>
+</head>
+<body>
+<h1>🎬 Faceless Storyboard AI</h1>
+<p>Made Tabrani • Pembuat prompt video tanpa wajah</p>
+
+<label>Judul cerita</label>
+<input id="judul" placeholder="Contoh: Perjuangan seorang anak">
+
+<label>Gaya animasi</label>
+<select id="gaya">
+<option>Cinematic Realistic</option>
+<option>3D Animation</option>
+<option>Anime</option>
+<option>Stop Motion</option>
+<option>Clay Animation</option>
+</select>
+
+<label>Pergerakan kamera</label>
+<select id="kamera">
+<option>Slow Camera Push In</option>
+<option>Wide Shot</option>
+<option>Slow Pan Left</option>
+<option>Tracking Shot</option>
+<option>Drone Shot</option>
+<option>Static Camera</option>
+</select>
+
+<div id="scenes"></div>
+<button onclick="buat()">Buat 5 Scene</button>
+<button onclick="salinSemua()">Salin Semua Prompt</button>
+<p id="status"></p>
+
+<script>
+const adegan=[
+["Pembukaan","Establishing shot introducing the environment and main character."],
+["Awal cerita","The faceless character begins the main activity."],
+["Perkembangan","The character faces a challenge and takes action."],
+["Puncak cerita","A cinematic turning point with meaningful movement."],
+["Penutup","A memorable ending with a wide cinematic shot."]
+];
+function buat(){
+let judul=document.getElementById('judul').value||'Untitled Story';
+let gaya=document.getElementById('gaya').value;
+let kamera=document.getElementById('kamera').value;
+let html='';
+adegan.forEach((a,i)=>{
+let image=`${gaya} style, ${a[1]} Story: ${judul}. Consistent faceless character with a completely smooth blank head, no eyes, no nose, no mouth, no ears. Clear composition, professional lighting, consistent character design.`;
+let motion=`${a[1]} ${kamera}. Smooth natural movement, cinematic pacing, ${gaya} style. Scene ${i+1} of 5, duration 12 seconds. No facial features, no background music.`;
+html+=`<div class="scene"><h3>Scene ${i+1} — ${a[0]}</h3><label>Image Prompt (English)</label><textarea id="img${i}" rows="4">${image}</textarea><button onclick="salin('img${i}')">Salin Image Prompt</button><label>Video Motion (English)</label><textarea id="vid${i}" rows="4">${motion}</textarea><button onclick="salin('vid${i}')">Salin Video Motion</button></div>`;
+});
+document.getElementById('scenes').innerHTML=html;
+document.getElementById('status').textContent='5 scene berhasil dibuat • Total durasi 60 detik';
+}
+function salin(id){
+let el=document.getElementById(id);
+el.select();el.setSelectionRange(0,99999);
+if(navigator.clipboard&&navigator.clipboard.writeText){
+navigator.clipboard.writeText(el.value).then(()=>document.getElementById('status').textContent='Prompt berhasil disalin').catch(()=>document.getElementById('status').textContent='Pilih teks lalu salin melalui menu browser');
+}else{document.getElementById('status').textContent='Teks dipilih. Tekan Salin pada menu browser.'}
+}
+function salinSemua(){
+let teks='';
+for(let i=0;i<5;i++){
+let img=document.getElementById('img'+i),vid=document.getElementById('vid'+i);
+if(!img||!vid){buat();return;}
+teks+=`SCENE ${i+1}\nIMAGE PROMPT:\n${img.value}\nVIDEO MOTION:\n${vid.value}\n\n`;
+}
+let area=document.createElement('textarea');area.value=teks;document.body.appendChild(area);area.select();
+try{document.execCommand('copy');document.getElementById('status').textContent='Semua prompt dipilih untuk disalin';}catch(e){document.getElementById('status').textContent='Pilih dan salin teks yang tersedia.'}
+area.remove();
+}
+buat();
+</script>
+</body>
+</html>
