@@ -61,7 +61,9 @@ let gaya=document.getElementById('gaya').value;
 let kamera=document.getElementById('kamera').value;
 let html='';
 adegan.forEach((a,i)=>{
-let image=`${gaya} style, ${a[1]} Story: ${judul}. Consistent faceless character with a completely smooth blank head, no eyes, no nose, no mouth, no ears. Clear composition, professional lighting, consistent character design.`;
+
+let image=`${gaya} style, ${a[1]} Story: ${judul}. A tall, upright, dignified adult male figure wearing modest historically accurate 7th-century Arabian robes and a traditional Arabian head covering. His entire face is concealed by a soft, bright, gentle white glow, with absolutely no visible eyes, nose, mouth, or facial features. Realistic human body proportions, consistent height, clothing, silhouette, and character design in every scene. Historically grounded 7th-century Arabia, realistic cinematic lighting, natural shadows, detailed environment. White facial glow only, no flames, no fire, no fiery effects. Companions may walk beside him when appropriate to the story. Respectful Islamic historical depiction; never show a Prophet's face. Clear composition, professional lighting, consistent character design.`;
+
 let motion=`${a[1]} ${kamera}. Smooth natural movement, cinematic pacing, ${gaya} style. Scene ${i+1} of 5, duration 12 seconds. No facial features, no background music.`;
 html+=`<div class="scene"><h3>Scene ${i+1} — ${a[0]}</h3><label>Image Prompt (English)</label><textarea id="img${i}" rows="4">${image}</textarea><button onclick="salin('img${i}')">Salin Image Prompt</button><label>Video Motion (English)</label><textarea id="vid${i}" rows="4">${motion}</textarea><button onclick="salin('vid${i}')">Salin Video Motion</button></div>`;
 });
