@@ -3,92 +3,436 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Faceless Storyboard AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faceless Storyboard AI | Hadis & Sirah</title>
 <style>
-body{font-family:Arial,sans-serif;background:#101827;color:#fff;margin:0;padding:18px}
-h1{font-size:25px;color:#7dd3fc}
-p{color:#cbd5e1}
-label{display:block;margin-top:15px;margin-bottom:7px}
-input,select,textarea,button{box-sizing:border-box;width:100%;padding:12px;border-radius:9px;border:1px solid #475569;font-size:15px}
-input,select,textarea{background:#1e293b;color:white}
-button{background:#0284c7;color:white;border:0;margin-top:10px;font-weight:bold}
-.scene{border:1px solid #334155;padding:13px;border-radius:12px;margin-top:14px}
+:root {
+  --green:#175c48;
+  --green-light:#eaf5ef;
+  --ink:#1b2533;
+  --muted:#64748b;
+  --line:#e2e8f0;
+  --bg:#f6f8fb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.6}
+header{background:#143e32;color:white;padding:22px 16px}
+.header-inner,main{max-width:1180px;margin:auto}
+.header-inner{display:flex;align-items:center;gap:13px}
+.logo{width:45px;height:45px;border:1px solid #ffffff55;border-radius:12px;display:grid;place-items:center;font-size:23px}
+h1{font-size:clamp(21px,4vw,29px);margin:0;line-height:1.25}
+header p{margin:5px 0 0;color:#d5e8df;font-size:12px}
+main{padding:22px 15px 45px}
+.notice{background:#fff9e8;border:1px solid #efdfb7;color:#75541b;border-radius:12px;padding:12px 14px;font-size:12px;margin-bottom:18px}
+.layout{display:grid;grid-template-columns:305px minmax(0,1fr);gap:18px;align-items:start}
+.card{background:white;border:1px solid var(--line);border-radius:15px;min-width:0}
+.settings,.workspace{padding:17px}
+h2{font-size:16px;margin:0}
+.sub{font-size:12px;color:var(--muted);margin:4px 0 18px}
+.field{margin-bottom:14px}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:6px;color:#344054}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d0d8e3;border-radius:9px;background:white;color:var(--ink);font:inherit;font-size:13px;outline:none}
+textarea{resize:vertical;min-height:82px}
+input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px #175c4818}
+.btn{border:1px solid var(--line);background:white;color:#344054;border-radius:9px;padding:10px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.btn:hover{background:#f5f8f7}
+.primary{background:var(--green);color:white;border-color:var(--green)}
+.primary:hover{background:#104735}
+.full{width:100%}
+.hint{font-size:11px;color:var(--muted);margin-top:6px}
+.error{color:#b42318;font-size:12px;margin-bottom:8px}
+.headrow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}
+.headrow p{font-size:12px;color:var(--muted);margin:3px 0 0}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.metric{border:1px solid var(--line);border-radius:10px;padding:10px}
+.metric strong{display:block;font-size:21px}
+.metric span{font-size:11px;color:var(--muted)}
+.scenes{display:grid;gap:13px;margin-top:15px}
+.scene{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:white}
+.scene-head{background:#f8fafb;border-bottom:1px solid var(--line);padding:12px;display:flex;align-items:center;gap:10px}
+.number{width:35px;height:35px;flex-shrink:0;background:var(--green-light);color:var(--green);border-radius:9px;display:grid;place-items:center;font-weight:800}
+.scene-head strong{font-size:13px;display:block}
+.scene-head small{font-size:11px;color:var(--muted)}
+.scene-body{padding:13px}
+.desc{font-size:12px;color:var(--muted);margin:0 0 13px}
+.small-title{font-size:10px;letter-spacing:.8px;font-weight:800;color:var(--muted);margin-bottom:6px}
+.prompt{white-space:pre-wrap;overflow-wrap:anywhere;background:#f8fafc;border:1px solid #edf0f4;border-radius:9px;padding:11px;font-size:12px;line-height:1.65}
+.block{margin-bottom:14px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.empty{padding:35px 18px;text-align:center;border:1px dashed #cbd5e1;border-radius:12px;margin-top:15px}
+.empty-icon{font-size:25px;background:var(--green-light);width:55px;height:55px;border-radius:15px;display:grid;place-items:center;margin:0 auto 12px}
+.empty h3{font-size:15px;margin:0 0 6px}
+.empty p{font-size:12px;color:var(--muted);max-width:360px;margin:0 auto 15px}
+.status{font-size:12px;color:#147d53;min-height:20px;margin-top:10px}
+.footer{font-size:11px;color:var(--muted);line-height:1.7;margin-top:18px}
+.hidden{display:none!important}
+@media(max-width:800px){
+ .layout{grid-template-columns:1fr}
+ main{padding:17px 11px 35px}
+ .settings,.workspace{padding:13px}
+ .metric{padding:8px}
+ .metric strong{font-size:19px}
+ .headrow{align-items:flex-start}
+}
 </style>
 </head>
 <body>
-<h1>🎬 Faceless Storyboard AI</h1>
-<p>Made Tabrani • Pembuat prompt video tanpa wajah</p>
+<header>
+  <div class="header-inner">
+    <div class="logo">✦</div>
+    <div>
+      <h1>Faceless Storyboard AI</h1>
+      <p>HADIS & SIRAH · STORYBOARD WORKSPACE</p>
+    </div>
+  </div>
+</header>
 
-<label>Judul cerita</label>
-<input id="judul" placeholder="Contoh: Perjuangan seorang anak">
+<main>
+<div class="notice">
+<strong>Adab visual:</strong> Nabi Muhammad ﷺ tidak divisualisasikan sebagai tubuh, wajah, atau siluet manusia. Jika disebut dalam prompt visual, gunakan cahaya abstrak tanpa bentuk manusia atau tampilkan lingkungan saja. Sahabat ditampilkan tanpa wajah. Visual yang dihasilkan merupakan ilustrasi, bukan rekaman sejarah autentik.
+</div>
 
-<label>Gaya animasi</label>
-<select id="gaya">
-<option>Cinematic Realistic</option>
-<option>3D Animation</option>
-<option>Anime</option>
-<option>Stop Motion</option>
-<option>Clay Animation</option>
+<div class="layout">
+<aside class="card settings">
+<h2>Pengaturan Cerita</h2>
+<p class="sub">Buat storyboard hadis dalam lima adegan.</p>
+
+<form id="storyForm">
+<div class="field">
+<label for="story">Pilih kisah</label>
+<select id="story">
+<option value="intentions">Hadis tentang niat</option>
+<option value="kindness">Berkata baik atau diam</option>
+<option value="patience">Kesabaran seorang mukmin</option>
 </select>
+</div>
 
-<label>Pergerakan kamera</label>
-<select id="kamera">
-<option>Slow Camera Push In</option>
-<option>Wide Shot</option>
-<option>Slow Pan Left</option>
-<option>Tracking Shot</option>
-<option>Drone Shot</option>
-<option>Static Camera</option>
+<div class="field">
+<label for="title">Judul video</label>
+<input id="title" maxlength="100" required value="Segalanya Berawal dari Niat">
+</div>
+
+<div class="field">
+<label for="language">Bahasa narasi</label>
+<select id="language">
+<option value="id">Bahasa Indonesia</option>
+<option value="en">English</option>
+<option value="both">Indonesia + English</option>
 </select>
+</div>
 
-<div id="scenes"></div>
-<button onclick="buat()">Buat 5 Scene</button>
-<button onclick="salinSemua()">Salin Semua Prompt</button>
-<p id="status"></p>
+<div class="field">
+<label for="style">Gaya animasi (15 pilihan)</label>
+<select id="style">
+<option value="cinematic">Cinematic realistic</option>
+<option value="anime">Anime film</option>
+<option value="3d">3D animation</option>
+<option value="watercolor">Watercolor illustration</option>
+<option value="documentary">Historical documentary</option>
+<option value="noir">Dark cinematic / noir</option>
+<option value="storybook">Illustrated storybook</option>
+<option value="painterly">Painterly historical art</option>
+<option value="minimal">Minimalist silhouettes</option>
+<option value="epic">Epic historical cinema</option>
+<option value="soft">Soft light and dust</option>
+<option value="vintage">Vintage film texture</option>
+<option value="paper">Paper-cut animation</option>
+<option value="clay">Clay animation</option>
+<option value="ink">Ink wash illustration</option>
+</select>
+</div>
+
+<div class="field">
+<label for="camera">Gerakan kamera (15 pilihan)</label>
+<select id="camera">
+<option value="push">Slow push-in</option>
+<option value="pan">Slow cinematic pan</option>
+<option value="tracking">Tracking shot</option>
+<option value="orbit">Slow orbit</option>
+<option value="static">Static shot</option>
+<option value="crane">Crane reveal</option>
+<option value="pull">Slow pull-back</option>
+<option value="tilt">Slow tilt up</option>
+<option value="dolly">Sideways dolly</option>
+<option value="handheld">Subtle handheld</option>
+<option value="overhead">Overhead shot</option>
+<option value="wide">Wide establishing shot</option>
+<option value="close">Detail close-up</option>
+<option value="follow">Follow from behind</option>
+<option value="rack">Rack focus</option>
+</select>
+</div>
+
+<div class="field">
+<label for="music">Musik dan audio</label>
+<select id="music">
+<option value="none">Tanpa musik, ambience sahaja</option>
+<option value="ambient">Ambient lembut tanpa vokal</option>
+<option value="nature">Suara alam dan angin</option>
+<option value="strings">String sinematik lembut</option>
+<option value="percussion">Perkusi atmosferik ringan</option>
+</select>
+</div>
+
+<div class="field">
+<label for="duration">Durasi video</label>
+<select id="duration">
+<option value="12">12 detik × 5 scene = 60 detik</option>
+<option value="6">6 detik × 5 scene = 30 detik</option>
+</select>
+</div>
+
+<div id="error" class="error" role="alert"></div>
+<button type="submit" class="btn primary full">✦ Buat 5 Scene</button>
+</form>
+
+<p class="hint">Generator berjalan di browser tanpa API key. Hasilnya berupa storyboard dan prompt, bukan video MP4 otomatis.</p>
+</aside>
+
+<section class="card workspace">
+<div class="headrow">
+<div>
+<h2>Storyboard</h2>
+<p id="subtitle">Pilih kisah untuk memulai.</p>
+</div>
+<button class="btn" id="export" disabled>↓ Ekspor .txt</button>
+</div>
+
+<div class="metrics">
+<div class="metric"><strong id="metricScenes">5</strong><span>Scene</span></div>
+<div class="metric"><strong id="metricDuration">60s</strong><span>Total durasi</span></div>
+<div class="metric"><strong>9:16</strong><span>Format video</span></div>
+</div>
+
+<div class="empty" id="empty">
+<div class="empty-icon">▤</div>
+<h3>Siap membuat storyboard hadis?</h3>
+<p>Tekan tombol berikut untuk menghasilkan lima scene, lengkap dengan narasi, prompt visual, arahan gerakan video, dan referensi.</p>
+<button class="btn" id="example">Buat storyboard sekarang</button>
+</div>
+
+<div class="scenes" id="scenes"></div>
+<div class="actions hidden" id="actions">
+<button class="btn" id="copyAll">▣ Salin Semua Prompt</button>
+<button class="btn" id="regenerate">↻ Buat Ulang</button>
+</div>
+<div class="status" id="status" role="status"></div>
+<div class="footer">
+Periksa kembali teks hadis, terjemahan, dan rujukan sebelum publikasi. Prompt visual adalah ilustrasi rekaan. Jangan menyatakan visual buatan AI sebagai rekaman sejarah autentik.
+</div>
+</section>
+</div>
+</main>
 
 <script>
-const adegan=[
-["Pembukaan","Establishing shot introducing the environment and main character."],
-["Awal cerita","The faceless character begins the main activity."],
-["Perkembangan","The character faces a challenge and takes action."],
-["Puncak cerita","A cinematic turning point with meaningful movement."],
-["Penutup","A memorable ending with a wide cinematic shot."]
-];
-function buat(){
-let judul=document.getElementById('judul').value||'Untitled Story';
-let gaya=document.getElementById('gaya').value;
-let kamera=document.getElementById('kamera').value;
-let html='';
-adegan.forEach((a,i)=>{
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+let scenes=[],current=null;
 
-let image=`${gaya} style, ${a[1]} Story: ${judul}. Depict Prophet Muhammad (peace be upon him) exclusively as a radiant, soft, pure white light extending from head to feet. Absolutely no visible human silhouette, body shape, outline, face, skin, hands, feet, or anatomy. Show only white light, with no human form beneath it. No flames or fire effects. Companions are dignified adult Arabian men wearing historically accurate 7th-century Arabian robes, cloaks, turbans, and sandals. Their bodies and clothing may be visible, but their faces must be completely concealed by a soft, bright white glow with no visible facial features. Maintain consistent character design, clothing, and height in every scene. All narration and voice-over must be in Arabic. Conversations between companions may be in Indonesian. Do not use English in the generated narration, dialogue, or on-screen text. Respectful Islamic historical depiction, realistic cinematic lighting, detailed environment, consistent character design`;
+const visualStyles={
+cinematic:"cinematic realistic historical film, natural textures, subtle film grain, warm desert light",
+anime:"high-quality anime film aesthetic, respectful historical atmosphere, detailed architecture",
+"3d":"premium 3D animated historical scene, detailed materials, cinematic lighting",
+watercolor:"traditional watercolor illustration, textured paper, soft pigments",
+documentary:"historical documentary visual reconstruction, authentic textures, natural light",
+noir:"moody cinematic historical scene, deep shadows, muted earth tones",
+storybook:"elegant illustrated storybook, hand-painted details, warm restrained palette",
+painterly:"painterly historical illustration, visible brushwork, atmospheric depth",
+minimal:"minimalist silhouettes, geometric architecture, broad negative space",
+epic:"epic historical cinema, sweeping environment, atmospheric scale",
+soft:"soft volumetric light, floating dust particles, gentle contrast",
+vintage:"vintage film texture, subtle grain, historically inspired colors",
+paper:"layered paper-cut animation, handcrafted texture, elegant depth",
+clay:"carefully crafted clay animation, tactile materials, miniature environment",
+ink:"traditional ink wash illustration, expressive brush strokes, paper texture"
+};
 
-let motion=`${a[1]} ${kamera}. Smooth natural movement, cinematic pacing, ${gaya} style. Scene ${i+1} of 5, duration 12 seconds. No facial features, no background music.`;
-html+=`<div class="scene"><h3>Scene ${i+1} — ${a[0]}</h3><label>Image Prompt (English)</label><textarea id="img${i}" rows="4">${image}</textarea><button onclick="salin('img${i}')">Salin Image Prompt</button><label>Video Motion (English)</label><textarea id="vid${i}" rows="4">${motion}</textarea><button onclick="salin('vid${i}')">Salin Video Motion</button></div>`;
+const cameraMoves={
+push:"slow controlled camera push-in, natural depth of field",
+pan:"slow cinematic pan, gradual environmental reveal",
+tracking:"smooth tracking shot, natural parallax",
+orbit:"slow controlled orbit around the environment",
+static:"static locked-off shot, subtle environmental motion",
+crane:"slow crane reveal from architecture to the wider environment",
+pull:"slow camera pull-back revealing the broader setting",
+tilt:"slow tilt upward from ground details to architecture and sky",
+dolly:"smooth sideways dolly, layered foreground and background",
+handheld:"very subtle handheld movement, restrained documentary feel",
+overhead:"steady overhead shot of objects and environmental details",
+wide:"wide establishing shot with clear composition",
+close:"slow detail close-up on objects, parchment, fabric, or hands",
+follow:"follow from behind, keep all faces outside the frame",
+rack:"gentle rack focus between foreground object and distant environment"
+};
+
+const library={
+intentions:{
+title:"Segalanya Berawal dari Niat",
+reference:"Sahih al-Bukhari 1; Sahih Muslim 1907",
+arabic:"إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ",
+translation:"Sesungguhnya amal itu bergantung pada niat.",
+source:"Diriwayatkan dari Umar bin Al-Khattab رضي الله عنه. Rujukan: Sahih al-Bukhari 1 dan Sahih Muslim 1907.",
+scenes:[
+["Pembuka: Perjalanan Dimulai","Perkenalkan suasana perjalanan dan pertanyaan tentang tujuan di balik tindakan.","Setiap perjalanan dimulai dengan satu hal yang tak terlihat: niat di dalam hati.","Every journey begins with something unseen: the intention within the heart.","A historical Arabian town at dawn, travelers preparing to leave through an ancient stone gate, date palms, sandstone buildings, period-appropriate clothing, faces not visible, contemplative atmosphere."],
+["Scene 2: Dua Tujuan","Gambarkan perjalanan dan perbedaan tujuan batin secara simbolis.","Dua orang dapat melakukan perjalanan yang sama, tetapi membawa tujuan yang berbeda.","Two people can take the same journey, yet carry different intentions.","Two anonymous travelers seen only from behind on a dusty road, modest travel bundles, distant desert hills, no visible faces, historically grounded clothing."],
+["Scene 3: Pesan Hadis","Tampilkan kaligrafi sebagai representasi pelajaran hadis, bukan manuskrip asli.","Umar bin Al-Khattab meriwayatkan sabda Nabi tentang pentingnya niat dalam setiap amal.","Umar ibn al-Khattab narrated the Prophet's teaching on the importance of intention in every deed.","An open parchment on a wooden stand in a quiet study, elegant Arabic calligraphy إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ, warm light, ink pot and parchment, no human figure, symbolic educational illustration."],
+["Scene 4: Makna di Balik Amal","Tampilkan tindakan membantu orang lain tanpa mencari perhatian.","Nilai sebuah amal bukan hanya pada apa yang terlihat, tetapi juga pada tujuan yang melandasinya.","The meaning of a deed lies not only in what is seen, but also in the purpose behind it.","An anonymous traveler seen from behind offering a water vessel to another weary traveler, hands and clothing only, faces outside frame, humane moment, soft natural light."],
+["Penutup: Periksa Niat","Akhiri dengan jalan menuju cakrawala dan pesan reflektif.","Sebelum melangkah, periksa niat. Sebab arah hati memberi makna pada perjalanan.","Before you take a step, examine your intention. The heart's direction gives meaning to the journey.","A lone anonymous traveler seen from behind walking toward a warm horizon beyond sandstone hills, long shadows, peaceful desert atmosphere, no visible face, space for a separately added caption."]
+]},
+kindness:{
+title:"Kebaikan yang Menenangkan",
+reference:"Sahih al-Bukhari 6018; Sahih Muslim 47",
+arabic:"فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
+translation:"Hendaklah berkata baik atau diam.",
+source:"Hadis tentang berkata baik atau diam. Periksa redaksi dan penomoran pada edisi rujukan yang digunakan.",
+scenes:[
+["Pembuka: Kekuatan Kata","Perkenalkan interaksi santun di pasar bersejarah.","Satu kalimat dapat melukai, tetapi kata yang baik juga dapat menenangkan.","A single sentence can wound, but kind words can also bring peace.","A historical Arabian market, anonymous merchants exchanging goods respectfully, faces hidden by framing from behind, natural warm daylight."],
+["Scene 2: Mendengarkan","Tampilkan seseorang mendengarkan dengan penuh perhatian.","Terkadang, kebaikan dimulai ketika kita berhenti berbicara dan mau mendengarkan.","Sometimes kindness begins when we stop speaking and choose to listen.","Two anonymous figures seated beside a sandstone wall, shown from behind and through hands and posture, one listening attentively, modest historical clothing."],
+["Scene 3: Pesan Hadis","Kaligrafi menjadi pusat visual pelajaran tentang ucapan yang baik.","Dalam hadis, kita diajarkan untuk berkata baik atau memilih diam.","In the hadith, we are taught to speak good or remain silent.","Elegant Arabic calligraphy فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ on parchment in a calm study, warm window light, no people."],
+["Scene 4: Kebaikan Nyata","Gambarkan bantuan sederhana kepada orang lain.","Kata yang baik menjadi lebih bermakna ketika diikuti tindakan yang tulus.","Kind words become more meaningful when followed by sincere action.","Anonymous neighbors sharing a basket of dates at a doorway, hands and figures seen from behind, no visible faces, humble historical setting."],
+["Penutup: Pilih Kebaikan","Akhiri dengan suasana tenang dan kesan damai.","Hari ini, pilih kata yang membangun. Jika tidak membawa kebaikan, diam pun bisa menjadi kebijaksanaan.","Today, choose words that build others up. If words bring no good, silence can be wisdom.","Quiet old-town alley at sunset, anonymous figures walking away in the distance, warm light and long shadows, no visible faces."]
+]},
+patience:{
+title:"Kesabaran Saat Ujian",
+reference:"Sahih Muslim 2999",
+arabic:"عَجَبًا لِأَمْرِ الْمُؤْمِنِ",
+translation:"Sungguh menakjubkan keadaan seorang mukmin.",
+source:"Sahih Muslim 2999 menjelaskan kebaikan bagi seorang mukmin ketika mendapat kelapangan maupun kesulitan dengan sikap yang tepat.",
+scenes:[
+["Pembuka: Hari yang Berat","Perkenalkan seseorang yang menghadapi kesulitan.","Tidak semua hari berjalan sesuai harapan. Ada ujian yang datang tanpa kita rencanakan.","Not every day unfolds as we hope. Some trials arrive without warning.","An anonymous traveler seen from behind beneath a cloudy desert sky, carrying a modest bundle along a rocky path, face hidden, subdued natural light."],
+["Scene 2: Berhenti Sejenak","Tampilkan momen menenangkan diri dan memikirkan langkah berikutnya.","Di tengah kesulitan, kita masih bisa berhenti sejenak dan memilih respons yang lebih baik.","In difficulty, we can still pause and choose a better response.","Close view of anonymous hands resting beside a clay water vessel and travel bag, sandstone shelter, no visible face, quiet atmosphere."],
+["Scene 3: Pelajaran Hadis","Gunakan manuskrip sebagai simbol ilmu dan perenungan.","Hadis mengingatkan bahwa keadaan seorang mukmin dapat mengandung kebaikan, baik dalam kelapangan maupun kesulitan.","A hadith reminds us that a believer may find good in both ease and hardship.","Open parchment with Arabic calligraphy عَجَبًا لِأَمْرِ الْمُؤْمِنِ, wooden desk, gentle light, no people, symbolic educational illustration."],
+["Scene 4: Tetap Berbuat Baik","Gambarkan tindakan membantu orang lain meski sedang diuji.","Kesabaran bukan berarti berhenti berusaha. Kita tetap melangkah dan tetap berbuat baik.","Patience does not mean giving up. We keep moving and keep doing good.","Anonymous traveler helping another person lift a fallen bundle on a rocky path, both shown from behind, faces not visible, compassionate restrained moment."],
+["Penutup: Terus Melangkah","Akhiri dengan perjalanan menuju cahaya pagi.","Saat lapang, bersyukurlah. Saat sulit, bersabarlah dan teruslah mencari jalan yang baik.","In ease, be grateful. In hardship, be patient and keep seeking a good path.","Two anonymous travelers seen from behind walking toward a bright horizon over desert hills, soft golden light, no visible faces, hopeful composition."]
+]}
+};
+
+function getLibrary(){return library[$("story").value]}
+function getNarration(item){
+ const lang=$("language").value;
+ if(lang==="en")return item[3];
+ if(lang==="both")return "INDONESIA: "+item[2]+"\nENGLISH: "+item[3];
+ return item[2];
+}
+function generate(){
+ const data=getLibrary();
+ const title=$("title").value.trim();
+ if(!title){$("error").textContent="Judul video wajib diisi.";return}
+ $("error").textContent="";
+ const seconds=Number($("duration").value);
+ const style=visualStyles[$("style").value];
+ const camera=cameraMoves[$("camera").value];
+ const music=$("music").value;
+ current={title,reference:data.reference,duration:seconds*5,story:$("story").value};
+ scenes=data.scenes.map((item,i)=>{
+  const visual=style+". Story title: "+title+". Scene "+(i+1)+" of 5. "+item[4]+
+   " Maintain consistent historical art direction. Respectful religious storytelling. Never depict Prophet Muhammad ﷺ as a human body, face, or silhouette. If referenced visually, use only abstract soft white light with no human outline, or show the environment only. Companions must be faceless: show from behind, distant silhouettes, cropped hands, or keep faces outside the frame. No modern objects, no text overlays, no watermark. Vertical 9:16 composition.";
+  const motion=camera+". "+item[1]+" Animate only relevant environmental and subject movement, natural physics, coherent spatial continuity, no visible faces. "+seconds+"-second vertical 9:16 shot.";
+  let audio="No music. Use subtle natural ambience only: wind, footsteps, fabric movement, or room tone.";
+  if(music==="ambient")audio="Soft wordless ambient texture, low volume, no vocals; keep narration clear.";
+  if(music==="nature")audio="Natural wind and environmental ambience, no vocals; keep narration clear.";
+  if(music==="strings")audio="Gentle cinematic strings, restrained and low in the mix, no vocals.";
+  if(music==="percussion")audio="Light atmospheric percussion, subtle and restrained, no vocals.";
+  return {number:i+1,title:item[0],description:item[1],seconds,
+   narration:getNarration(item),visual,motion,audio};
+ });
+ render();
+ $("status").textContent="Storyboard berhasil dibuat. Periksa rujukan hadis sebelum publikasi.";
+}
+function esc(value){
+ return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function render(){
+ $("empty").classList.toggle("hidden",scenes.length>0);
+ $("actions").classList.toggle("hidden",scenes.length===0);
+ $("export").disabled=scenes.length===0;
+ $("metricScenes").textContent=scenes.length||5;
+ $("metricDuration").textContent=(current?current.duration:Number($("duration").value)*5)+"s";
+ $("subtitle").textContent=current?current.title+" · "+current.reference:"Pilih kisah untuk memulai.";
+ $("scenes").innerHTML=scenes.map(s=>`
+ <article class="scene">
+  <div class="scene-head">
+   <div class="number">${String(s.number).padStart(2,"0")}</div>
+   <div><strong>${esc(s.title)}</strong><small>${s.seconds} detik · ${esc(s.description)}</small></div>
+  </div>
+  <div class="scene-body">
+   <div class="block"><div class="small-title">NARASI / VOICE-OVER</div>
+    <div class="prompt">${esc(s.narration)}</div>
+    <button class="btn copy" data-number="${s.number}" data-part="narration">Salin narasi</button>
+   </div>
+   <div class="block"><div class="small-title">PROMPT VISUAL (ENGLISH)</div>
+    <div class="prompt">${esc(s.visual)}</div>
+    <button class="btn copy" data-number="${s.number}" data-part="visual">Salin prompt visual</button>
+   </div>
+   <div class="block"><div class="small-title">PROMPT GERAK VIDEO (ENGLISH)</div>
+    <div class="prompt">${esc(s.motion)}</div>
+    <button class="btn copy" data-number="${s.number}" data-part="motion">Salin prompt gerak</button>
+   </div>
+   <div class="block"><div class="small-title">AUDIO</div><div class="prompt">${esc(s.audio)}</div></div>
+  </div>
+ </article>`).join("");
+}
+function exportText(){
+ const data=getLibrary();
+ return "FACELESS STORYBOARD AI — HADIS & SIRAH\n"+current.title+
+ "\nDurasi: "+current.duration+" detik | 5 scene | Format 9:16\n"+
+ "Rujukan: "+data.reference+"\nTeks hadis: "+data.arabic+
+ "\nTerjemahan ringkas: "+data.translation+"\nSumber: "+data.source+
+ "\n\n"+scenes.map(s=>
+ "SCENE "+s.number+": "+s.title+" ("+s.seconds+"s)\n"+
+ "Tujuan: "+s.description+"\n\nNARASI:\n"+s.narration+
+ "\n\nPROMPT VISUAL:\n"+s.visual+"\n\nPROMPT GERAK VIDEO:\n"+
+ s.motion+"\n\nAUDIO:\n"+s.audio+"\n"
+ ).join("\n"+"-".repeat(45)+"\n\n")+
+ "\nCatatan: visual adalah ilustrasi rekaan. Verifikasi rujukan hadis sebelum publikasi.";
+}
+async function copyText(text){
+ try{
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+   await navigator.clipboard.writeText(text);
+  }else{
+   const area=document.createElement("textarea");
+   area.value=text;document.body.appendChild(area);area.select();
+   document.execCommand("copy");area.remove();
+  }
+  $("status").textContent="Berhasil disalin.";
+ }catch(e){
+  $("status").textContent="Salin otomatis gagal. Coba gunakan Ekspor .txt.";
+ }
+}
+$("storyForm").addEventListener("submit",e=>{e.preventDefault();generate()});
+$("example").addEventListener("click",generate);
+$("story").addEventListener("change",()=>{
+ $("title").value=getLibrary().title;
 });
-document.getElementById('scenes').innerHTML=html;
-document.getElementById('status').textContent='5 scene berhasil dibuat • Total durasi 60 detik';
-}
-function salin(id){
-let el=document.getElementById(id);
-el.select();el.setSelectionRange(0,99999);
-if(navigator.clipboard&&navigator.clipboard.writeText){
-navigator.clipboard.writeText(el.value).then(()=>document.getElementById('status').textContent='Prompt berhasil disalin').catch(()=>document.getElementById('status').textContent='Pilih teks lalu salin melalui menu browser');
-}else{document.getElementById('status').textContent='Teks dipilih. Tekan Salin pada menu browser.'}
-}
-function salinSemua(){
-let teks='';
-for(let i=0;i<5;i++){
-let img=document.getElementById('img'+i),vid=document.getElementById('vid'+i);
-if(!img||!vid){buat();return;}
-teks+=`SCENE ${i+1}\nIMAGE PROMPT:\n${img.value}\nVIDEO MOTION:\n${vid.value}\n\n`;
-}
-let area=document.createElement('textarea');area.value=teks;document.body.appendChild(area);area.select();
-try{document.execCommand('copy');document.getElementById('status').textContent='Semua prompt dipilih untuk disalin';}catch(e){document.getElementById('status').textContent='Pilih dan salin teks yang tersedia.'}
-area.remove();
-}
-buat();
+$("scenes").addEventListener("click",e=>{
+ const button=e.target.closest(".copy");
+ if(!button)return;
+ const scene=scenes.find(s=>s.number===Number(button.dataset.number));
+ if(scene)copyText(scene[button.dataset.part]);
+});
+$("copyAll").addEventListener("click",()=>{if(scenes.length)copyText(exportText())});
+$("regenerate").addEventListener("click",generate);
+$("export").addEventListener("click",()=>{
+ if(!scenes.length)return;
+ const blob=new Blob([exportText()],{type:"text/plain;charset=utf-8"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download="faceless-storyboard-hadis.txt";
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+ $("status").textContent="File storyboard berhasil diunduh.";
+});
+["duration","style","camera","language","music"].forEach(id=>{
+ $(id).addEventListener("change",()=>{
+  if(scenes.length)generate();
+  else if(id==="duration")$("metricDuration").textContent=(Number($("duration").value)*5)+"s";
+ });
+});
+$("title").addEventListener("change",()=>{if(scenes.length)generate()});
+render();
+})();
 </script>
 </body>
 </html>
